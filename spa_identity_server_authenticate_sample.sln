@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30114.105
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApiDemo", "WebApiDemo\WebApiDemo.csproj", "{4E9D05AB-229C-446D-82AD-DC5B7F6D2E56}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdentityServerAspNetIdentity", "IdentityServerAspNetIdentity\IdentityServerAspNetIdentity.csproj", "{B22056B2-125B-452A-93E9-98C808A95002}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4E9D05AB-229C-446D-82AD-DC5B7F6D2E56}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4E9D05AB-229C-446D-82AD-DC5B7F6D2E56}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4E9D05AB-229C-446D-82AD-DC5B7F6D2E56}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4E9D05AB-229C-446D-82AD-DC5B7F6D2E56}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B22056B2-125B-452A-93E9-98C808A95002}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B22056B2-125B-452A-93E9-98C808A95002}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B22056B2-125B-452A-93E9-98C808A95002}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B22056B2-125B-452A-93E9-98C808A95002}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
