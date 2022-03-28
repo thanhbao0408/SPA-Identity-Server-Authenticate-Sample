@@ -73,3 +73,4 @@ E:\.net\spa_identity_server_authenticate_sample\IdentityServerAspNetIdentity\obj
 E:\.net\spa_identity_server_authenticate_sample\IdentityServerAspNetIdentity\obj\Debug\net6.0\IdentityServerAspNetIdentity.pdb
 E:\.net\spa_identity_server_authenticate_sample\IdentityServerAspNetIdentity\obj\Debug\net6.0\IdentityServerAspNetIdentity.genruntimeconfig.cache
 E:\.net\spa_identity_server_authenticate_sample\IdentityServerAspNetIdentity\obj\Debug\net6.0\ref\IdentityServerAspNetIdentity.dll
+E:\.net\spa_identity_server_authenticate_sample\IdentityServerAspNetIdentity\bin\Debug\net6.0\keys\is-signing-key-86B94DFA4464E8A83A30534E66EDDD0C.json
