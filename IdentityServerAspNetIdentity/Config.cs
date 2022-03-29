@@ -1,4 +1,5 @@
-﻿using Duende.IdentityServer.Models;
+﻿using Duende.IdentityServer;
+using Duende.IdentityServer.Models;
 
 namespace IdentityServerAspNetIdentity;
 
@@ -20,21 +21,42 @@ public static class Config
     public static IEnumerable<Client> Clients =>
         new Client[]
         {
-             // Swagger client
-                new Client
+            // Swagger client
+            new Client
+            {
+                ClientId = "api_swagger",
+                ClientName = "Swagger UI for Sample API",
+                ClientSecrets = {new Secret("secret".Sha256())}, // change me!
+
+                AllowedGrantTypes = GrantTypes.Code,
+
+                RedirectUris = {"https://localhost:7101/swagger/oauth2-redirect.html"},
+                AllowedCorsOrigins = {"https://localhost:7101"},
+                AllowedScopes = new List<string>
                 {
-                    ClientId = "api_swagger",
-                    ClientName = "Swagger UI for Sample API",
-                    ClientSecrets = {new Secret("secret".Sha256())}, // change me!
+                    "SampleAPI"
+                }
+            },
+            // NextJs client
+            new Client
+            {
+                ClientId = "nextjs_web_app",
+                ClientName = "NextJs Web App",
+                ClientSecrets = {new Secret("secret".Sha256())}, // change me!
+                AllowedGrantTypes =  new[] { GrantType.AuthorizationCode },
+                    
+                //// where to redirect to after login
+                RedirectUris = { "http://localhost:3000/api/auth/callback/sample-identity-server" },
+                //// where to redirect to after logout
+                PostLogoutRedirectUris = { "http://localhost:3000" },
+                AllowedCorsOrigins= { "http://localhost:3000" },
 
-                    AllowedGrantTypes = GrantTypes.Code,
-
-                    RedirectUris = {"https://localhost:7101/swagger/oauth2-redirect.html"},
-                    AllowedCorsOrigins = {"https://localhost:7101"},
-                    AllowedScopes = new List<string>
-                    {
-                        "SampleAPI"
-                    }
+                AllowedScopes = new List<string>
+                {
+                    IdentityServerConstants.StandardScopes.OpenId,
+                    IdentityServerConstants.StandardScopes.Profile,
+                    "SampleAPI"
                 },
+            }
         };
 }
