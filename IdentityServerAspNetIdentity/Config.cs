@@ -26,7 +26,7 @@ public static class Config
             {
                 ClientId = "api_swagger",
                 ClientName = "Swagger UI for Sample API",
-                ClientSecrets = {new Secret("secret".Sha256())}, // change me!
+                ClientSecrets = {new Secret("secret".Sha256())},
 
                 AllowedGrantTypes = GrantTypes.Code,
 
@@ -43,8 +43,11 @@ public static class Config
                 ClientId = "nextjs_web_app",
                 ClientName = "NextJs Web App",
                 ClientSecrets = {new Secret("secret".Sha256())}, // change me!
-                AllowedGrantTypes =  new[] { GrantType.AuthorizationCode },
+                RequireClientSecret = false,
+                AllowedGrantTypes =  new[] { GrantType.AuthorizationCode, GrantType.ResourceOwnerPassword },
                     
+                AllowOfflineAccess = true,
+
                 //// where to redirect to after login
                 RedirectUris = { "http://localhost:3000/api/auth/callback/sample-identity-server" },
                 //// where to redirect to after logout

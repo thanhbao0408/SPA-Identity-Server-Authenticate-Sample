@@ -1,5 +1,6 @@
 import NextAuth from "next-auth"
-import IdentityServer4Provider from 'next-auth/providers/identity-server4';
+import IdentityServer4Provider from "next-auth/providers/identity-server4"
+import CredentialsProvider from "next-auth/providers/credentials"
 
 // For more information on each option (and a full list of options) go to
 // https://next-auth.js.org/configuration/options
@@ -9,11 +10,69 @@ export default NextAuth({
     IdentityServer4Provider({
       id: "sample-identity-server",
       name: "Demo IdentityServer",
-      authorization: { params: { scope: "openid profile SampleAPI" } },
-      issuer:  "https://localhost:5001",
+      authorization: {
+        params: { scope: "openid profile SampleAPI offline_access" },
+      },
+      issuer: "https://localhost:5001",
       clientId: "nextjs_web_app",
       clientSecret: "secret",
-    })
+    }),
+
+    CredentialsProvider({
+      // The name to display on the sign in form (e.g. 'Sign in with...')
+      name: "Credentials Demo",
+      // The credentials is used to generate a suitable form on the sign in page.
+      // You can specify whatever fields you are expecting to be submitted.
+      // e.g. domain, username, password, 2FA token, etc.
+      // You can pass any HTML attribute to the <input> tag through the object.
+      credentials: {
+        username: { label: "Username", type: "text", placeholder: "alice" },
+        password: { label: "Password", type: "password" },
+      },
+      async authorize(credentials, req) {
+        // You need to provide your own logic here that takes the credentials
+        // submitted and returns either a object representing a user or value
+        // that is false/null if the credentials are invalid.
+        // e.g. return { id: 1, name: 'J Smith', email: 'jsmith@example.com' }
+        // You can also use the `req` object to obtain additional parameters
+        // (i.e., the request IP address)
+
+        const reqData = {
+          ...credentials,
+          // password: "Pass123$",
+          client_id: "nextjs_web_app",
+          scope: "openid profile offline_access SampleAPI",
+          grant_type: "password",
+        } as any
+
+        let formBody = []
+        for (let property in reqData) {
+          let encodedKey = encodeURIComponent(property)
+          let encodedValue = encodeURIComponent(reqData[property])
+          formBody.push(encodedKey + "=" + encodedValue)
+        }
+
+        const formBodyStr = formBody.join("&")
+
+        const res = await fetch("https://localhost:5001/connect/token", {
+          method: "POST",
+          body: formBodyStr,
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
+          },
+        })
+        const user = await res.json()
+        console.log(user)
+        // console.log(user);
+        // console.log(user);
+        // If no error and we have user data, return it
+        if (res.ok && user) {
+          return user
+        }
+        // Return null if user data could not be retrieved
+        return null
+      },
+    }),
   ],
   // Database optional. MySQL, Maria DB, Postgres and MongoDB are supported.
   // https://next-auth.js.org/configuration/databases
@@ -32,7 +91,7 @@ export default NextAuth({
     // Use JSON Web Tokens for session instead of database sessions.
     // This option can be used with or without a database for users/accounts.
     // Note: `strategy` should be set to 'jwt' if no database is used.
-    strategy: 'jwt'
+    strategy: "jwt",
 
     // Seconds - How long until an idle session expires and is no longer valid.
     // maxAge: 30 * 24 * 60 * 60, // 30 days
@@ -74,10 +133,34 @@ export default NextAuth({
   // when an action is performed.
   // https://next-auth.js.org/configuration/callbacks
   callbacks: {
-    // async signIn({ user, account, profile, email, credentials }) { return true },
+    async signIn({ user, account, profile, email, credentials }) {
+      // console.log("SIGN-IN", profile, email, credentials);
+      if (user?.access_token) {
+        account.access_token = user?.access_token as string
+        // console.log(parseJwt(account.access_token));
+      }
+      if (user?.refresh_token) {
+        account.refresh_token = user?.refresh_token as string
+      }
+
+      return true
+    },
+    async jwt({ token, user, account, profile, isNewUser }) {
+      // console.log("JWT",user,profile,isNewUser);
+      // Add access_token to the token right after signin
+      // console.log(account);
+      if (account?.access_token) {
+        token.access_token = account?.access_token
+      }
+
+      if (account?.refresh_token) {
+        token.refresh_token = account?.refresh_token
+      }
+
+      return token
+    },
     // async redirect({ url, baseUrl }) { return baseUrl },
     // async session({ session, token, user }) { return session },
-    // async jwt({ token, user, account, profile, isNewUser }) { return token }
   },
 
   // Events are useful for logging
